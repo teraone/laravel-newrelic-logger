@@ -1,0 +1,30 @@
+{
+    "name": "teraone/new-relic-logger",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "teraone\\NewRelicLogger\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Paul Wild",
+            "email": "pool@teraone.de"
+        }
+    ],
+    "require-dev": {
+        "orchestra/testbench": "^8.0"
+    },
+    "require": {
+        "php": "^8.1",
+        "monolog/monolog": "^3.3"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "teraone\\NewRelicLogger\\NewRelicLoggerServiceProvider"
+            ]
+        }
+    }
+}
