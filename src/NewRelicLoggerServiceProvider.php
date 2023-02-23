@@ -3,26 +3,33 @@
 namespace teraone\NewRelicLogger;
 
 use Closure;
+use Illuminate\Contracts\Container\Container;
+use Illuminate\Log\LogManager;
 use Illuminate\Support\ServiceProvider;
+use Monolog\Handler\StreamHandler;
+use Monolog\Level;
+use Monolog\Logger;
 
 class NewRelicLoggerServiceProvider extends ServiceProvider
 {
-    public function register()
-    {
-        $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'newrelic');
-    }
-
     public function boot()
     {
-        $this->app->make('config')->set('logging.channels.newrelic', [
-            'driver' => config('newrelic.driver'),
-            'path' => storage_path('logs/'.config('newrelic.log_file')),
-            'level' => config('newrelic.log_level'),
-            'formatter' => NewRelicLogFormatter::class
-        ]);
+        if ($this->app['log'] instanceof LogManager) {
+            $this->app['log']->extend('newrelic', function (Container $app, array $config) {
 
-        $this->publishes([
-            __DIR__.'/../config/config.php' => config_path('newrelic.php')
-        ]);
+                //Creates a Log Handler with the passed in config
+                $handler = new StreamHandler(
+                    $config['path'] ?? storage_path('logs/'.'newrelic.log'), $config['level'] ?? Level::Debug,
+                    $config['bubble'] ?? true, $config['permission'] ?? null, $config['locking'] ?? false
+                );
+
+                //Initializes the custom Formatter and adds it to the Handler
+                $formatter = new NewRelicLogFormatter();
+                $handler->setFormatter($formatter);
+
+                //Creates and returns the custom Logger with the Handler
+                return new Logger('newrelic', [$handler]);
+            });
+        }
     }
 }
