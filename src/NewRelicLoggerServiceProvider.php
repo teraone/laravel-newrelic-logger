@@ -2,12 +2,10 @@
 
 namespace teraone\NewRelicLogger;
 
-use Closure;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Log\LogManager;
 use Illuminate\Support\ServiceProvider;
 use Monolog\Handler\StreamHandler;
-use Monolog\Level;
 use Monolog\Logger;
 
 class NewRelicLoggerServiceProvider extends ServiceProvider
@@ -19,7 +17,7 @@ class NewRelicLoggerServiceProvider extends ServiceProvider
 
                 //Creates a Log Handler with the passed in config
                 $handler = new StreamHandler(
-                    $config['path'] ?? storage_path('logs/'.'newrelic.log'), $config['level'] ?? Level::Debug,
+                    $config['path'] ?? storage_path('logs/'.'newrelic.log'), $config['level'] ?? Logger::DEBUG,
                     $config['bubble'] ?? true, $config['permission'] ?? null, $config['locking'] ?? false
                 );
 

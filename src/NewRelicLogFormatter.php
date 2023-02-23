@@ -3,13 +3,12 @@
 namespace teraone\NewRelicLogger;
 
 use Monolog\Formatter\JsonFormatter;
-use Monolog\LogRecord;
 
 class NewRelicLogFormatter extends JsonFormatter
 {
-    public function format(LogRecord $record): string
+    public function format(array $record): string
     {
-        $record = $this->includeMetaData($record->toArray());
+        $record = $this->includeMetaData($record);
 
         $normalized = $this->normalize($record);
 
