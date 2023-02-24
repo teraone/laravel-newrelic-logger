@@ -6,6 +6,12 @@ use Monolog\Formatter\JsonFormatter;
 
 class NewRelicLogFormatter extends JsonFormatter
 {
+
+    public function __construct(protected string $source, int $batchMode = self::BATCH_MODE_JSON, bool $appendNewline = true, bool $ignoreEmptyContextAndExtra = false, bool $includeStacktraces = false)
+    {
+        parent::__construct($batchMode, $appendNewline, $ignoreEmptyContextAndExtra, $includeStacktraces);
+    }
+
     public function format(array $record): string
     {
         $record = $this->includeMetaData($record);
@@ -34,7 +40,7 @@ class NewRelicLogFormatter extends JsonFormatter
     {
         $record['hostname'] = gethostname();
 
-        $record['source'] = config('newrelic.source');
+        $record['source'] = $this->source;
 
         $record['env'] = config('app.env');
 
