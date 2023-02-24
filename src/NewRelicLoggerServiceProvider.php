@@ -23,7 +23,7 @@ class NewRelicLoggerServiceProvider extends ServiceProvider
                 );
 
                 //Initializes the custom Formatter and adds it to the Handler
-                $formatter = new NewRelicLogFormatter($config['source'] ?? env('APP_NAME'));
+                $formatter = new NewRelicLogFormatter($config['source'] ?? env('APP_NAME'), $config['additional_info'] ?? []);
                 $handler->setFormatter($formatter);
 
                 //Creates and returns the custom Logger with the Handler

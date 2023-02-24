@@ -1,6 +1,7 @@
 {
     "name": "teraone/laravel-newrelic-logger",
     "type": "library",
+    "license": "MIT",
     "autoload": {
         "psr-4": {
             "teraone\\NewRelicLogger\\": "src/"

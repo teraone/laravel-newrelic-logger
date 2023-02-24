@@ -7,7 +7,7 @@ use Monolog\LogRecord;
 
 class NewRelicLogFormatter extends JsonFormatter
 {
-    public function __construct(protected string $source, int $batchMode = self::BATCH_MODE_JSON, bool $appendNewline = true, bool $ignoreEmptyContextAndExtra = false, bool $includeStacktraces = false)
+    public function __construct(protected string $source, protected array $additional_info, int $batchMode = self::BATCH_MODE_JSON, bool $appendNewline = true, bool $ignoreEmptyContextAndExtra = false, bool $includeStacktraces = false)
     {
         parent::__construct($batchMode, $appendNewline, $ignoreEmptyContextAndExtra, $includeStacktraces);
     }
@@ -38,20 +38,14 @@ class NewRelicLogFormatter extends JsonFormatter
 
     public function includeMetaData(array $record): array
     {
-        $record['hostname'] = gethostname();
-
-        $record['source'] = $this->source;
-
-        $record['env'] = config('app.env');
-
         if (app()->runningInConsole()) {
             $record['console'] = true;
         } else {
             $record['full_url'] = request()?->fullUrl();
         }
 
-        if (isset($record['context']['user_id'])) {
-            $record['user_id'] = $record['context']['user_id'];
+        foreach ($this->additional_info as $key => $value) {
+            $record[$key] = $value;
         }
 
         if (function_exists('newrelic_get_linking_metadata')) {
