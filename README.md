@@ -25,12 +25,15 @@ Just add a Log Channel with the driver "newrelic" to the logging.php config file
 ]
 ```
 
-There you can also add configuration like the path and the source parameter:
+There you can configure what else should be included in the logs:
 ```php
 'newrelic' => [
     'driver' => 'newrelic',
-    'path' => storage_path('logs/my-log-file.log'),
-    'source' => 'MyApp'
+    
+    'additional_info' => [
+        'env' => env('APP_ENV'),
+        'hostname' => gethostname()
+    ]
 ]
 ```
 
