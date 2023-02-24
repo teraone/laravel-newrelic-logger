@@ -2,7 +2,6 @@
 
 namespace teraone\NewRelicLogger;
 
-use Closure;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Log\LogManager;
 use Illuminate\Support\ServiceProvider;
